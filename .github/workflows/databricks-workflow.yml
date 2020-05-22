@@ -21,7 +21,7 @@ jobs:
 
     # first, let's prepare our environment
     - name: Install Python
-      run: sudo apt-get install python3 pip
+      run: sudo apt-get install python3-pip
     - name: Install Databricks CLI
       run: pip install databricks-cli
 
