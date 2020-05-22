@@ -11,7 +11,7 @@ local commonConf = {
     }
   ],
   "timeout_seconds": 3600,
-  "max_retries": 1,
+  "max_retries": 0,
   "spark_jar_task": {
     "main_class_name": "com.databricks.example.FirstJob"
   },
