@@ -3,7 +3,7 @@ local commonConf = {
   "new_cluster": {
     "spark_version": "6.5.x-scala2.11",
     "node_type_id": "Standard_D3_v2",
-    "num_workers": 1
+    "num_workers": 0 #initial value, should be overriden by following configurations
   },
   "libraries": [
     {
@@ -19,7 +19,7 @@ local commonConf = {
 };
 
 local testConf = commonConf + {
-    "new_cluster"+: {"num_workers": 2},
+    "new_cluster"+: {"num_workers": 1},
 };
 
 local liveConf = commonConf + {
