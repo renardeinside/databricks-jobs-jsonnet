@@ -40,14 +40,20 @@ jobs:
         with:
           python-version: 3.7
 
-      - name: Install Databricks CLI
-        run: python -m pip install databricks-cli jsonnet
+      - name: Install Databricks CLI & jsonnet
+        run: python -m pip install databricks-cli
 
       - name: Check Databricks CLI
         run: databricks clusters list
 
-      - name: Check jsonnet
-        run: jsonnet -v
+      - name: Install and check jsonnet
+        run: |
+          cd /opt
+          git clone https://github.com/google/jsonnet.git
+          cd jsonnet
+          make
+          sudo cp ./jsonnet /usr/bin/jsonnet
+          jsonnet -v
 
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
