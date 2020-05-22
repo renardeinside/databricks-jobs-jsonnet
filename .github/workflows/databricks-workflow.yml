@@ -47,6 +47,11 @@ jobs:
       - name: Upload jars to DBFS
         run: databricks fs cp target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar dbfs:/mnt/jars/first-job.jar
 
-      - name: Create Databricks Job
-        run: databricks jobs create --json-file=src/main/resources/live-conf.json
+      - name: Create First Job
+        run: databricks jobs create --json-file=src/main/resources/live-conf.json >> /tmp/job_id.json
+
+      - name: Run First Job
+        run: |
+          DB_JOB_ID=$(cat /tmp/job_id.json | jq -r '.job_id')
+          databricks jobs run-now --job-id $DB_JOB_ID
 
