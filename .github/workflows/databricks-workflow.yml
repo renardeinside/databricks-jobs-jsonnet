@@ -37,6 +37,7 @@ jobs:
     # Let's test that databricks CLI works properly
     - name: Deploy first job
       run: databricks clusters list
+      shell: bash
 
     # now, let's build and deploy our model
     - uses: actions/cache@v1
