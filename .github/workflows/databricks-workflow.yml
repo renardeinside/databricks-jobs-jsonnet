@@ -17,11 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      # Prepare environment
-      - name: Install and test Databricks CLI
+      - name: Setup python
         uses: actions/setup-python@v2
         with:
           python-version: 3.7
-        run: |
-          python -m pip install databricks-cli
-          databricks clusters list
+
+      - name: Install Databricks CLI
+        run: python -m pip install databricks-cli
+
+      - name: Check clusters list
+        run: databricks clusters list
