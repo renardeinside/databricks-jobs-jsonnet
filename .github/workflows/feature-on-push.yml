@@ -74,7 +74,7 @@ jobs:
         run: |
           databricks fs cp --overwrite \
             target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
-            dbfs:/mnt/jars/first-job-${BRANCH_NAME}-${BUILD_VERSION}.jar
+            dbfs:/mnt/jars/first-job-${BRANCH_NAME}-${$BUILD_NUMBER}.jar
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
