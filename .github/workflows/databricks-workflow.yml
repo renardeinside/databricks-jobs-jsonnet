@@ -13,20 +13,23 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
       DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
-
     steps:
       - uses: actions/checkout@v2
 
-      - name: Branch name
-        run: BRANCH_NAME=${GITHUB_REF##*/}
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
 
       - name: Generate build number
         uses: einaregilsson/build-number@v2
         with:
           token: ${{secrets.github_token}}
 
-      - name: Print new build number
+      - name: Print build number and branch name
         run: echo "Build number is $BUILD_NUMBER, branch name is ${BRANCH_NAME}"
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
       - name: Setup Python
         uses: actions/setup-python@v2
