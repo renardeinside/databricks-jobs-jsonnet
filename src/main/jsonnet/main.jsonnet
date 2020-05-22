@@ -14,7 +14,8 @@ local commonConf = {
   "max_retries": 1,
   "spark_jar_task": {
     "main_class_name": "com.databricks.example.FirstJob"
-  }
+  },
+  "instance_pool_id": "0522-223301-hoof20-pool-l59GfzQZ"
 };
 
 local testConf = commonConf + {
