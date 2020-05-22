@@ -2,7 +2,7 @@ package com.databricks.example
 
 import org.apache.spark.sql.SparkSession
 
-object FirstExampleJob extends App {
+object FirstJob extends App {
 
   val spark = SparkSession.builder().master("local[*]").getOrCreate()
 

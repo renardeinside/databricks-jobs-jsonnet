@@ -2,9 +2,9 @@ package com.databricks.example
 
 import org.scalatest.funsuite.AnyFunSuite
 
-class FirstExampleJobTest extends AnyFunSuite {
+class FirstJobTest extends AnyFunSuite {
   test("run first job") {
-    val job = FirstExampleJob
+    val job = FirstJob
     job.main(Array.empty)
   }
 }
