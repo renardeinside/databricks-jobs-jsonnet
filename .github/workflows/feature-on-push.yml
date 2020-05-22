@@ -41,7 +41,7 @@ jobs:
           python-version: 3.7
 
       - name: Install Databricks CLI
-        run: python -m pip install databricks-cli
+        run: python -m pip install databricks-cli jsonnet
 
       - name: Check clusters list
         run: databricks clusters list
