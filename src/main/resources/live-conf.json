@@ -1,0 +1,18 @@
+{
+  "name": "First Job",
+  "new_cluster": {
+    "spark_version": "5.3.x-scala2.11",
+    "node_type_id": "Standard_D3_v2",
+    "num_workers": 2
+  },
+  "libraries": [
+    {
+      "jar": "dbfs:/mnt/jars/first-job.jar"
+    }
+  ],
+  "timeout_seconds": 3600,
+  "max_retries": 1,
+  "spark_jar_task": {
+    "main_class_name": "com.databricks.example.FirstJob"
+  }
+}

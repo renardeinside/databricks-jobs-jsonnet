@@ -1,11 +1,14 @@
 package com.databricks.example
 
+import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
 
-object FirstJob extends App {
+object FirstJob extends App with Logging {
 
-  val spark = SparkSession.builder().master("local[*]").getOrCreate()
+  var spark = SparkSession.builder().getOrCreate()
 
-  spark.sparkContext.parallelize(0 to 1000).sum()
+  val result = spark.sparkContext.parallelize(0 to 1000).sum()
+
+  log.info(s"Result is $result")
 
 }
