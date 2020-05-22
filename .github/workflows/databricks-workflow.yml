@@ -45,7 +45,7 @@ jobs:
         run: mvn -B package --file pom.xml
 
       - name: Upload jars to DBFS
-        run: databricks fs cp target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar dbfs:/mnt/jars/first-job.jar
+        run: databricks fs cp --overwrite target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar dbfs:/mnt/jars/first-job.jar
 
       - name: Create First Job
         run: databricks jobs create --json-file=src/main/resources/live-conf.json >> /tmp/job_id.json
