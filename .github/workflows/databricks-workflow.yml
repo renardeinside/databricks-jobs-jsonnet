@@ -15,36 +15,13 @@ jobs:
       DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
 
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-
-    # first, let's prepare our environment
-    - uses: actions/cache@v1
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-    - name: Install Python
-      run: sudo apt-get install python3-pip python3-setuptools
-    - name: Install Databricks CLI
-      run: pip3 install databricks-cli
-
-    # Let's test that databricks CLI works properly
-    - name: Deploy first job
-      run: databricks clusters list
-      shell: bash
-
-    # now, let's build and deploy our model
-    - uses: actions/cache@v1
-      with:
-        path: ~/.m2/repository
-        key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
-        restore-keys: |
-          ${{ runner.os }}-maven-
-    - name: Build with Maven
-      run: mvn -B package --file pom.xml
+      # Prepare environment
+      - name: Install and test Databricks CLI
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+        run: |
+          python -m pip install databricks-cli
+          databricks clusters list
