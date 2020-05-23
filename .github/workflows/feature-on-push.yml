@@ -6,7 +6,8 @@ name: databricks-launch
 on:
   push:
     branches:
-      - feature/*
+      - '*'         # matches every branch
+      - '!master'   # excludes master
 
 jobs:
   build:
@@ -16,6 +17,7 @@ jobs:
     env:
       DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
       DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
     steps:
       - uses: actions/checkout@v2
 
@@ -42,8 +44,14 @@ jobs:
       - name: Install Databricks CLI
         run: python -m pip install databricks-cli
 
-      - name: Check clusters list
-        run: databricks clusters list
+      - name: Install and check jsonnet
+        run: |
+          cd /opt
+          git clone https://github.com/google/jsonnet.git
+          cd jsonnet
+          make
+          sudo cp ./jsonnet /usr/bin/jsonnet
+          jsonnet -v
 
       - name: Set up JDK 1.8
         uses: actions/setup-java@v1
@@ -60,12 +68,19 @@ jobs:
 
       - name: Build jars
         run: mvn -B package --file pom.xml
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
       - name: Upload jars to DBFS
-        run: databricks fs cp --overwrite target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar dbfs:/mnt/jars/first-job.jar
+        run: |
+          databricks fs cp --overwrite \
+            target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
+            dbfs:/mnt/jars/first-job-${BRANCH_NAME}-${BUILD_NUMBER}.jar
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
       - name: Create First Job
-        run: databricks jobs create --json-file=src/main/resources/live-conf.json >> /tmp/job_id.json
+        run: databricks jobs create --json-file=src/main/resources/test-conf.json >> /tmp/job_id.json
 
       - name: Run First Job
         run: |
