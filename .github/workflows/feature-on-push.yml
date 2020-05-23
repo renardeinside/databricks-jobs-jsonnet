@@ -6,7 +6,8 @@ name: databricks-launch
 on:
   push:
     branches:
-      - feature/*
+      - '*'         # matches every branch
+      - '!master'   # excludes master
 
 jobs:
   build:
