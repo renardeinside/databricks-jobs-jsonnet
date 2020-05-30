@@ -15,7 +15,7 @@ local commonConf = {
   "spark_jar_task": {
     "main_class_name": "com.databricks.example.FirstJob"
   },
-  "instance_pool_id": "0522-223301-hoof20-pool-l59GfzQZ"
+  "instance_pool_id": "0530-115052-mauve9-pool-uB4Kg5Xy"
 };
 
 local testConf = commonConf + {
