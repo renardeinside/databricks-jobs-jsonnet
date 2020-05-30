@@ -1,5 +1,7 @@
+local jobName = "itrusov-jsonnet-demo-first-job-%s-%s" % [std.extVar("branch"), std.extVar("version")];
+
 local commonConf = {
-  "name": "first-job-%s-%s" % [std.extVar("branch"), std.extVar("version")],
+  "name": jobName,
   "new_cluster": {
     "spark_version": "6.5.x-scala2.11",
     "node_type_id": "Standard_D3_v2",
@@ -7,7 +9,7 @@ local commonConf = {
   },
   "libraries": [
     {
-      "jar": "dbfs:/mnt/jars/first-job-%s-%s.jar" % [std.extVar("branch"), std.extVar("version")]
+      "jar": "dbfs:/mnt/jars/%s.jar" % [jobName]
     }
   ],
   "timeout_seconds": 3600,
