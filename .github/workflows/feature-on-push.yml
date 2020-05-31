@@ -77,7 +77,9 @@ jobs:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
       - name: Create First Job
-        run: databricks jobs create --json-file=src/main/resources/test-conf.json >> /tmp/job_id.json
+        run: |
+          databricks jobs create --json-file=src/main/resources/test-conf.json >> /tmp/job_id.json
+          cat /tmp/job_id.json
 
       - name: Run First Job
         run: |
