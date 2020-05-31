@@ -79,8 +79,7 @@ jobs:
       - name: Launch job
         run: |
           python deploy/launcher.py \
-            --branch=${BRANCH_NAME} \
-            --build-number=${BUILD_NUMBER} \
+            --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
             --json-file=./src/resources/test-conf.json \
             --trace
         env:
