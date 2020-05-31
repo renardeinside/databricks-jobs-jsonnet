@@ -1,21 +1,22 @@
+local jobName = "itrusov-jsonnet-demo-first-job-%s-%s" % [std.extVar("branch"), std.extVar("version")];
+
 local commonConf = {
-  "name": "first-job-%s-%s" % [std.extVar("branch"), std.extVar("version")],
+  "name": jobName,
   "new_cluster": {
     "spark_version": "6.5.x-scala2.11",
-    "node_type_id": "Standard_D3_v2",
+    "instance_pool_id": "0530-115052-mauve9-pool-uB4Kg5Xy",
     "num_workers": 0 #initial value, should be overriden by following configurations
   },
   "libraries": [
     {
-      "jar": "dbfs:/mnt/jars/first-job-%s-%s.jar" % [std.extVar("branch"), std.extVar("version")]
+      "jar": "dbfs:/mnt/jars/%s.jar" % [jobName]
     }
   ],
   "timeout_seconds": 3600,
   "max_retries": 0,
   "spark_jar_task": {
     "main_class_name": "com.databricks.example.FirstJob"
-  },
-  "instance_pool_id": "0522-223301-hoof20-pool-l59GfzQZ"
+  }
 };
 
 local testConf = commonConf + {
