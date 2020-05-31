@@ -22,7 +22,7 @@ def get_parser():
     p = ArgumentParser(description="Simple and programmable Databricks jobs launcher")
     p.add_argument("--jar", type=str, required=True)
     p.add_argument("--json-file", type=str, required=True)
-    p.add_argument("--trace", type=bool, action='store_true')
+    p.add_argument("--trace", action='store_true')
     return p
 
 
