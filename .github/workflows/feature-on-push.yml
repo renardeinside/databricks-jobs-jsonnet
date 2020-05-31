@@ -72,14 +72,13 @@ jobs:
         run: |
           databricks fs cp --overwrite \
             target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
-            dbfs:/mnt/jars/first-job-${BRANCH_NAME}-${BUILD_NUMBER}.jar
+            dbfs:/mnt/jars/itrusov-jsonnet-demo-first-job-${BRANCH_NAME}-${BUILD_NUMBER}.jar
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
       - name: Create First Job
         run: |
           databricks jobs create --json-file=src/main/resources/test-conf.json >> /tmp/job_id.json
-          cat /tmp/job_id.json
 
       - name: Run First Job
         run: |
