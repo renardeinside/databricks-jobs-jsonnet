@@ -76,9 +76,15 @@ jobs:
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Launch
+      - name: Launch job
         run: |
-          databricks runs submit --json-file=src/main/resources/test-conf.json
+          python deploy/launcher.py \
+            --branch=${BRANCH_NAME} \
+            --build-number=${BUILD_NUMBER} \
+            --json-file=./src/resources/test-conf.json \
+            --trace
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
 
 
