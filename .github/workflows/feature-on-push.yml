@@ -76,12 +76,9 @@ jobs:
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Create First Job
+      - name: Launch
         run: |
-          databricks jobs create --json-file=src/main/resources/test-conf.json >> /tmp/job_id.json
+          databricks runs submit --json-file=src/main/resources/test-conf.json
 
-      - name: Run First Job
-        run: |
-          DB_JOB_ID=$(cat /tmp/job_id.json | jq -r '.job_id')
-          databricks jobs run-now --job-id $DB_JOB_ID
+
 
