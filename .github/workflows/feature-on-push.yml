@@ -80,7 +80,7 @@ jobs:
         run: |
           python deploy/launcher.py \
             --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
-            --json-file=./src/resources/test-conf.json \
+            --json-file=src/main/resources/test-conf.json \
             --trace
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
