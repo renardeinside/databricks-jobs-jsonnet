@@ -1,0 +1,88 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
+
+name: databricks-launch
+
+on:
+  push:
+    branches:
+      - 'master'   # includes only master
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    env:
+      DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
+      DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]$(echo ${GITHUB_REF#refs/heads/})"
+        id: extract_branch
+
+      - name: Generate build number
+        uses: einaregilsson/build-number@v2
+        with:
+          token: ${{secrets.github_token}}
+
+      - name: Print build number and branch name
+        run: echo "Build number is $BUILD_NUMBER, branch name is ${BRANCH_NAME}"
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.7
+
+      - name: Install Databricks CLI
+        run: python -m pip install databricks-cli
+
+      - name: Install jsonnet
+        run: |
+          curl -L https://github.com/lihaoyi/sjsonnet/releases/download/0.2.4/sjsonnet.jar > sjsonnet.jar
+          chmod +x sjsonnet.jar
+          sudo mv ./sjsonnet.jar /usr/bin/jsonnet
+
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+
+      - name: Cache maven deps
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-
+
+      - name: Build jars
+        run: mvn -B package --file pom.xml
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Upload jars to DBFS
+        run: |
+          databricks fs cp --overwrite \
+            target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
+            dbfs:/mnt/jars/itrusov-jsonnet-demo-first-job-${BRANCH_NAME}-${BUILD_NUMBER}.jar
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Launch job
+        run: |
+          python deploy/launcher.py \
+            --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
+            --json-file=src/main/resources/test-conf.json \
+            --trace
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+
+
+
