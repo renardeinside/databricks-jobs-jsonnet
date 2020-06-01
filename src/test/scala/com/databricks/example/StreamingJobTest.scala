@@ -5,7 +5,7 @@ import java.nio.file.Files
 import com.databricks.example.StreamingJobTest.startTestingStream
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.col
-import org.apache.spark.sql.types.{DoubleType, IntegerType, StructType, TimestampType}
+import org.apache.spark.sql.types.{DoubleType, LongType, StructType, TimestampType}
 import org.scalatest.funsuite.AnyFunSuite
 
 class StreamingJobTest extends AnyFunSuite {
@@ -41,7 +41,7 @@ class StreamingJobTest extends AnyFunSuite {
     val resultDF = spark.read.format("delta").load(outputPath)
 
     val expectedSchema = new StructType()
-      .add("device_id", IntegerType)
+      .add("device_id", LongType)
       .add("registered_value", DoubleType)
       .add("report_timestamp", TimestampType)
 
