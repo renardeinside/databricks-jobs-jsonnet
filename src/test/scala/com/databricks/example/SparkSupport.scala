@@ -21,6 +21,8 @@ trait SparkSupport extends BeforeAndAfterAll {
 
   override def afterAll(): Unit = {
     super.afterAll()
-    spark.stop()
+    try {
+      spark.stop()
+    }
   }
 }

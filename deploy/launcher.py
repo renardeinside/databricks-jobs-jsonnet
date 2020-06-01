@@ -58,10 +58,7 @@ def deploy(client: ApiClient, job_conf: Dict[str, Any], task_args: Dict[str, Any
                     if result_state == "SUCCESS":
                         logging.info("Job successfully finished!")
                     else:
-                        exception_text = "Job finished with result state %s. Please check run UI at %s" % (
-                            result_state,
-                            run_status["run_page_url"]
-                        )
+                        exception_text = "Job finished with result state %s. Please check run UI!" % result_state
                         raise Exception(exception_text)
     logging.info("All deployment actions successfully performed")
 

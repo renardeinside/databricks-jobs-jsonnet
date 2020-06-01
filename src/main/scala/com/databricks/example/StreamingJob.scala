@@ -3,6 +3,7 @@ package com.databricks.example
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.{col, floor, rand}
+import org.apache.spark.sql.streaming.Trigger
 
 object StreamingJob extends App with Logging {
 
@@ -27,7 +28,7 @@ object StreamingJob extends App with Logging {
     throw new Exception(s"Incorrect arguments passed to the job!")
   }
 
-  log.info("Arguments successfully parsed!")
+  log.info(s"Arguments successfully parsed, job configuration: $conf")
 
   // these shall be a var because we need to inject other classes as a dependency in tests
   var spark = SparkSession.builder().getOrCreate()
@@ -49,13 +50,21 @@ object StreamingJob extends App with Logging {
     .writeStream
     .format("delta")
     .option("checkpointLocation", conf.checkpoint_location)
+    .trigger(Trigger.Once())
     .start(conf.output_path)
 
 
   conf.termination_ms match {
-    case None => writerQuery.awaitTermination()
-    case Some(x) => writerQuery.awaitTermination(x)
+    case None =>
+      log.info("Starting unbounded streaming job")
+      writerQuery.awaitTermination()
+    case Some(timeout) =>
+      log.info(s"Starting bounded streaming job with timeout $timeout")
+      writerQuery.awaitTermination(timeout)
+      log.info("Timeout requirement fulfilled, gracefully stopping the stream")
+      spark.streams.active.foreach(_.stop())
+      log.info("All streams stopped")
   }
 
-
+  log.info("Streaming job successfully stopped!")
 }
