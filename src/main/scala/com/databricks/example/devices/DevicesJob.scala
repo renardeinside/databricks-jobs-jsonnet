@@ -23,10 +23,8 @@ object DevicesJob extends App with Logging {
   // these shall be a var because we need to inject other classes as a dependency in tests
   var spark = SparkSession.builder().getOrCreate()
 
-  val rawSourcePath = getClass.getResource("/device_location.csv").getPath
+  val sourcePath = getClass.getResource("/device_location.csv").getPath
 
-  // this is how Spark could recognise that file should be downloaded from driver machine
-  val sourcePath = s"file://$rawSourcePath"
 
   val expectedSchema = new StructType()
     .add("device_id", IntegerType)
