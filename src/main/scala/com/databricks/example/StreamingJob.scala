@@ -58,7 +58,7 @@ object StreamingJob extends App with Logging {
       writerQuery.awaitTermination()
     case Some(timeout) =>
       log.info(s"Starting bounded streaming job with timeout $timeout")
-      writerQuery.awaitTermination(timeout)
+      spark.streams.awaitAnyTermination(timeout)
   }
 
 
