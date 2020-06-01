@@ -28,7 +28,7 @@ local testConf = commonConf + {
             "--source_path", "/databricks-datasets/structured-streaming/events",
             "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/bronze-events",
             "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/test/jsonnet/checkpoints/bronze-events",
-            "--termination_ms", "100000" # 100 seconds
+            "--termination_ms", "10000" # 100 seconds
             ]
     }
 };

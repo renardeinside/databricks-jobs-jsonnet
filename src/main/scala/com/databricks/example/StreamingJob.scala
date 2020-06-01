@@ -27,7 +27,7 @@ object StreamingJob extends App with Logging {
     throw new Exception(s"Incorrect arguments passed to the job!")
   }
 
-  log.info("Arguments successfully parsed!")
+  log.info(s"Arguments successfully parsed, job configuration: $conf")
 
   // these shall be a var because we need to inject other classes as a dependency in tests
   var spark = SparkSession.builder().getOrCreate()
@@ -53,8 +53,12 @@ object StreamingJob extends App with Logging {
 
 
   conf.termination_ms match {
-    case None => writerQuery.awaitTermination()
-    case Some(x) => writerQuery.awaitTermination(x)
+    case None =>
+      log.info("Starting unbounded streaming job")
+      writerQuery.awaitTermination()
+    case Some(timeout) =>
+      log.info(s"Starting bounded streaming job with timeout $timeout")
+      writerQuery.awaitTermination(timeout)
   }
 
 
