@@ -59,6 +59,8 @@ jobs:
         run: mvn -B package --file pom.xml
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Cache maven deps
         uses: actions/cache@v1
         with:
           path: ~/.m2/repository
