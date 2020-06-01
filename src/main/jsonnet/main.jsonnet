@@ -60,6 +60,7 @@ local parameterMap = {
             "--termination_ms", "10000" # 100 seconds
         ],
         "devices": [
+            "--source_path", "/mnt/ivan.trusov@databricks.com/device_location.csv",
             "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/silver-devices"
         ],
     },
@@ -70,6 +71,7 @@ local parameterMap = {
             "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/live/jsonnet/checkpoints/silver-events",
         ],
         "devices": [
+            "--source_path", "/mnt/ivan.trusov@databricks.com/device_location.csv",
             "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/live/data/silver-devices"
         ]
     }

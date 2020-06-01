@@ -9,6 +9,9 @@ object DevicesJob extends App with Logging {
   log.info("Argument parsing step initiated")
 
   val parser = new scopt.OptionParser[DevicesConfig]("streaming-job") {
+    opt[String]("source_path") required() action { (x, c) =>
+      c.copy(source_path = x)
+    }
     opt[String]("output_path") required() action { (x, c) =>
       c.copy(output_path = x)
     }
@@ -23,8 +26,6 @@ object DevicesJob extends App with Logging {
   // these shall be a var because we need to inject other classes as a dependency in tests
   var spark = SparkSession.builder().getOrCreate()
 
-  val sourcePath = getClass.getResource("/device_location.csv").getPath
-
 
   val expectedSchema = new StructType()
     .add("device_id", IntegerType)
@@ -36,7 +37,7 @@ object DevicesJob extends App with Logging {
     .schema(expectedSchema)
     .format("csv")
     .option("header", "true")
-    .load(sourcePath)
+    .load(conf.source_path)
 
   devicesDF
     .write
