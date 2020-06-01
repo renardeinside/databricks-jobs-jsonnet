@@ -8,7 +8,7 @@ import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types.{DoubleType, LongType, StructType, TimestampType}
 import org.scalatest.funsuite.AnyFunSuite
 
-class StreamingJobTest extends AnyFunSuite {
+class StreamingJobTest extends AnyFunSuite with SparkSupport {
 
   val tempDir: String = Files.createTempDirectory("streaming-job").toFile.getPath
 
@@ -18,12 +18,6 @@ class StreamingJobTest extends AnyFunSuite {
   val outputcheckpointLocation: String = s"$tempDir/checkpoints/output"
 
   test("run streaming job") {
-
-    val spark = SparkSession
-      .builder()
-      .master("local[*]")
-      .config("spark.sql.shuffle.partitions", 1) // only for testing purposes!
-      .getOrCreate()
 
     startTestingStream(spark, sourcePath, sourceCheckpointLocation)
 
