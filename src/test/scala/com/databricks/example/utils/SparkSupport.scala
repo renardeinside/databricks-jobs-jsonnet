@@ -1,4 +1,4 @@
-package com.databricks.example
+package com.databricks.example.utils
 
 import org.apache.spark.sql.SparkSession
 import org.scalatest.{BeforeAndAfterAll, Suite}
@@ -20,9 +20,11 @@ trait SparkSupport extends BeforeAndAfterAll {
   }
 
   override def afterAll(): Unit = {
-    super.afterAll()
     try {
       spark.stop()
+    }
+    finally {
+      super.afterAll()
     }
   }
 }
