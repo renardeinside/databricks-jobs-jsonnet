@@ -76,7 +76,7 @@ jobs:
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Launch job
+      - name: Launch streaming job
         run: |
           python deploy/launcher.py \
             --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
