@@ -1,8 +1,9 @@
-package com.databricks.example
+package com.databricks.example.streaming
 
 import java.nio.file.Files
 
-import com.databricks.example.StreamingJobTest.startTestingStream
+import com.databricks.example.streaming.StreamingJobTest.startTestingStream
+import com.databricks.example.utils.SparkSupport
 import org.apache.spark.sql.SparkSession
 import org.apache.spark.sql.functions.col
 import org.apache.spark.sql.types.{DoubleType, LongType, StructType, TimestampType}

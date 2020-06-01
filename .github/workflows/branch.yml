@@ -68,19 +68,21 @@ jobs:
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
-      - name: Upload jars to DBFS
-        run: |
-          databricks fs cp --overwrite \
-            target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
-            dbfs:/mnt/jars/itrusov-jsonnet-demo-first-job-${BRANCH_NAME}-${BUILD_NUMBER}.jar
-        env:
-          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
-
-      - name: Launch streaming job
+      - name: Deploy devices job on test
         run: |
           python deploy/launcher.py \
             --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
-            --json-file=target/test-conf.json \
+            --json-file=target/devices-test-conf.json \
+            --run-now \
+            --trace
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Deploy streaming job on test
+        run: |
+          python deploy/launcher.py \
+            --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
+            --json-file=target/streaming-test-conf.json \
             --run-now \
             --trace
         env:

@@ -1,4 +1,4 @@
-package com.databricks.example
+package com.databricks.example.streaming
 
 case class StreamingConfig(
                             source_path: String = null,

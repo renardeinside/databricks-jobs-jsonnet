@@ -1,4 +1,4 @@
-package com.databricks.example
+package com.databricks.example.streaming
 
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession

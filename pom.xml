@@ -57,6 +57,7 @@
             <version>0.5.0</version>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>
@@ -128,8 +129,10 @@
                                 <argument>target</argument>
                                 <argument>src/main/jsonnet/main.jsonnet</argument>
                                 <argument>--ext-str</argument>
+                                <!--suppress UnresolvedMavenProperty -->
                                 <argument>branch=${env.BRANCH_NAME}</argument>
                                 <argument>--ext-str</argument>
+                                <!--suppress UnresolvedMavenProperty -->
                                 <argument>version=${env.BUILD_NUMBER}</argument>
                             </arguments>
                         </configuration>
