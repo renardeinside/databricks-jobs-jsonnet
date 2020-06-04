@@ -1,17 +1,19 @@
-package com.databricks.example.streaming
+package com.databricks.example.dashboard
 
 import org.apache.spark.internal.Logging
 import org.apache.spark.sql.SparkSession
-import org.apache.spark.sql.functions.{col, floor, rand}
 import org.apache.spark.sql.streaming.Trigger
 
-object StreamingJob extends App with Logging {
+object DashboardJob extends App with Logging {
 
   log.info("Argument parsing step initiated")
 
-  val parser = new scopt.OptionParser[StreamingConfig]("streaming-job") {
-    opt[String]("source_path") required() action { (x, c) =>
-      c.copy(source_path = x)
+  val parser = new scopt.OptionParser[DashboardConfig]("streaming-job") {
+    opt[String]("events_source_path") required() action { (x, c) =>
+      c.copy(events_source_path = x)
+    }
+    opt[String]("devices_source_path") required() action { (x, c) =>
+      c.copy(devices_source_path = x)
     }
     opt[String]("output_path") required() action { (x, c) =>
       c.copy(output_path = x)
@@ -24,7 +26,7 @@ object StreamingJob extends App with Logging {
     }
   }
 
-  val conf = parser.parse(args, StreamingConfig()).getOrElse {
+  val conf = parser.parse(args, DashboardConfig()).getOrElse {
     throw new Exception(s"Incorrect arguments passed to the job!")
   }
 
@@ -33,17 +35,16 @@ object StreamingJob extends App with Logging {
   // this shall be a var because we need to inject other classes as a dependency in tests
   var spark = SparkSession.builder().getOrCreate()
 
-  val rawSource = spark
+  val eventsStream = spark
     .readStream
-    .format("json")
-    .schema("time bigint")
-    .load(conf.source_path)
+    .format("delta")
+    .load(conf.events_source_path)
 
-  val transformedStream = rawSource
-    .withColumn("device_id", floor(rand() * 2))
-    .withColumn("registered_value", rand())
-    .withColumn("report_timestamp", col("time").cast("timestamp"))
-    .drop("action", "time")
+  val devices = spark.read.format("delta").load(conf.devices_source_path)
+
+  val transformedStream = eventsStream
+    .join(devices, eventsStream("device_id") === devices("device_id"))
+    .drop(devices("device_id"))
 
 
   val writerQuery = transformedStream

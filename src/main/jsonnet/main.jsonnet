@@ -48,32 +48,60 @@ local devicesJob = {
     "main_class_name": "com.databricks.example.devices.DevicesJob"
 };
 
+local dashboardJob = {
+    jobName: "dashboard",
+    "main_class_name": "com.databricks.example.devices.DashboardJob"
+};
 
-local jobs = [streamingJob, devicesJob];
+local jobs = [streamingJob, devicesJob,dashboardJob];
+
+local streamingOutputPath = {
+    "test": "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/silver/events",
+    "live": "/mnt/ivan.trusov@databricks.com/examples/jsonnet/live/data/silver/events"
+};
+
+local devicesOutputPath = {
+    "test": "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/silver/devices",
+    "live": "/mnt/ivan.trusov@databricks.com/examples/jsonnet/live/data/silver/devices"
+};
 
 local parameterMap = {
     "test": {
         "streaming": [
             "--source_path", "/databricks-datasets/structured-streaming/events",
-            "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/silver-events",
-            "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/test/jsonnet/checkpoints/silver-events",
+            "--output_path", streamingOutputPath["test"],
+            "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/test/jsonnet/checkpoints/silver/events",
             "--termination_ms", "10000" # 100 seconds
         ],
         "devices": [
             "--source_path", "/mnt/ivan.trusov@databricks.com/device_location.csv",
-            "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/silver-devices"
+            "--output_path", devicesOutputPath["test"]
+        ],
+        "dashboard": [
+                    "--events_source_path", streamingOutputPath["test"],
+                    "--devices_source_path", devicesOutputPath["test"],
+                    "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/silver/dashboard",
+                    "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/test/jsonnet/checkpoints/silver/dashboard",
+                    "--termination_ms", "10000" # 100 seconds
         ],
     },
     "live": {
         "streaming": [
             "--source_path", "/databricks-datasets/structured-streaming/events",
-            "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/live/data/silver-events",
-            "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/live/jsonnet/checkpoints/silver-events",
+            "--output_path", streamingOutputPath["live"],
+            "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/live/jsonnet/checkpoints/silver/events",
         ],
         "devices": [
             "--source_path", "/mnt/ivan.trusov@databricks.com/device_location.csv",
-            "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/live/data/silver-devices"
-        ]
+            "--output_path", devicesOutputPath["live"]
+        ],
+        "dashboard": [
+            "--events_source_path", streamingOutputPath["live"],
+            "--devices_source_path", devicesOutputPath["live"],
+            "--output_path", "/mnt/ivan.trusov@databricks.com/examples/jsonnet/test/data/silver/events",
+            "--checkpoint_location", "/mnt/ivan.trusov@databricks.com/examples/test/jsonnet/checkpoints/silver/events",
+            "--termination_ms", "10000" # 100 seconds
+        ],
     }
 };
 
