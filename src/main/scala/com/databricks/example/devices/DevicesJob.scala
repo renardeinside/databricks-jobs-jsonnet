@@ -1,7 +1,7 @@
 package com.databricks.example.devices
 
 import org.apache.spark.internal.Logging
-import org.apache.spark.sql.types.{DoubleType, IntegerType, StructType}
+import org.apache.spark.sql.types.{DoubleType, LongType, StructType}
 import org.apache.spark.sql.{SaveMode, SparkSession}
 
 object DevicesJob extends App with Logging {
@@ -23,12 +23,12 @@ object DevicesJob extends App with Logging {
 
   log.info(s"Arguments successfully parsed, job configuration: $conf")
 
-  // these shall be a var because we need to inject other classes as a dependency in tests
+  // this shall be a var because we need to inject other classes as a dependency in tests
   var spark = SparkSession.builder().getOrCreate()
 
 
   val expectedSchema = new StructType()
-    .add("device_id", IntegerType)
+    .add("device_id", LongType)
     .add("lat", DoubleType)
     .add("lon", DoubleType)
 
@@ -38,6 +38,7 @@ object DevicesJob extends App with Logging {
     .format("csv")
     .option("header", "true")
     .load(conf.source_path)
+
 
   devicesDF
     .write

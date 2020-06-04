@@ -68,6 +68,9 @@ jobs:
         env:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
+      - name: Cleanup test environment
+        run: databricks fs rm -r dbfs:/mnt/ivan.trusov@databricks.com/examples/jsonnet/test
+
       - name: Deploy devices job on test
         run: |
           python deploy/launcher.py \
@@ -83,6 +86,16 @@ jobs:
           python deploy/launcher.py \
             --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
             --json-file=target/streaming-test-conf.json \
+            --run-now \
+            --trace
+        env:
+          BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
+
+      - name: Deploy dashboard job on test
+        run: |
+          python deploy/launcher.py \
+            --jar=target/databricks-jobs-jsonnet-1.0-SNAPSHOT-jar-with-dependencies.jar \
+            --json-file=target/dashboard-test-conf.json \
             --run-now \
             --trace
         env:
