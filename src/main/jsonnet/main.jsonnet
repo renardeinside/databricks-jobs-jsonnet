@@ -75,7 +75,7 @@ local parameterMap = {
             "--source_path", "/databricks-datasets/structured-streaming/events",
             "--output_path", streamingOutputPath["test"],
             "--checkpoint_location", "%s/checkpoints/silver/events" % testRootPath,
-            "--termination_ms", "10000" # 100 seconds
+            "--termination_ms", "20000" # 200 seconds
         ],
         "devices": [
             "--source_path", "/mnt/ivan.trusov@databricks.com/device_location.csv",
@@ -86,7 +86,7 @@ local parameterMap = {
                     "--devices_source_path", devicesOutputPath["test"],
                     "--output_path", "%s/data/silver/dashboard" % testRootPath,
                     "--checkpoint_location", "%s/checkpoints/silver/dashboard" % testRootPath,
-                    "--termination_ms", "10000" # 100 seconds
+                    "--termination_ms", "20000" # 200 seconds
         ],
     },
     "live": {
