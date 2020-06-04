@@ -50,7 +50,7 @@ local devicesJob = {
 
 local dashboardJob = {
     jobName: "dashboard",
-    "main_class_name": "com.databricks.example.devices.DashboardJob"
+    "main_class_name": "com.databricks.example.dashboard.DashboardJob"
 };
 
 local jobs = [streamingJob, devicesJob,dashboardJob];
