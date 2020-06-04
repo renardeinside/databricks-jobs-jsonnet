@@ -69,7 +69,7 @@ jobs:
           BRANCH_NAME: ${{ steps.extract_branch.outputs.branch }}
 
       - name: Cleanup test environment
-        run: databricks fs rm -r /mnt/ivan.trusov@databricks.com/examples/jsonnet/test
+        run: databricks fs rm -r dbfs:/mnt/ivan.trusov@databricks.com/examples/jsonnet/test
 
       - name: Deploy devices job on test
         run: |
